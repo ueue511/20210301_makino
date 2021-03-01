@@ -1,32 +1,28 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+      <input type="tel" v-model="postalCodeNum" placeholder="ハイフンなしの7桁入力" required maxlength=7 oninput="value = value.replace(/[^0-9]+/i,'');" />
+      <input type="submit" value="住所自動入力" @click="PostCode_Searce"/>
+      <p>Address: {{ postaCode }}</p>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      postaCode: "",
+      postalCodeNum: ""
+    }
+  },
+  methods: {
+    async PostCode_Searce() {
+      const item = await axios.get(`https://apis.postcode-jp.com/api/v3/postcodes?postcode=${this.postalCodeNum}&general=true`);
+      const postaCodeData = item.data;
+      this.postaCode = postaCodeData.data[0].allAddress;
+    }
+  }
+};
+</script>
 
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
