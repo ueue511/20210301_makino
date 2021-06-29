@@ -14,6 +14,7 @@ export default {
       postaCode: "",
       postalCodeNum: ""
     }
+    // test
   },
   methods: {
     async PostCode_Searce() {
